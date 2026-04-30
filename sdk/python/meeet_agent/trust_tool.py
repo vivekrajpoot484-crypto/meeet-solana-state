@@ -11,3 +11,5 @@ class MEEETTrustTool:
         if score >= self.min_trust:
             return f"Trusted (score: {score:.2f})"
         return f"Low trust (score: {score:.2f})"
+    
+    

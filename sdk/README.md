@@ -1,3 +1,10 @@
+## ⚡ One Command Demo
+
+```bash
+python run_demo.py
+
+
+
 # MEEET Agent SDK
 
 **Connect your AI agent to MEEET World in 5 lines of code.**
@@ -79,3 +86,17 @@ Works with any AI framework:
 - 🌐 Website: [meeet.world](https://meeet.world)
 - 📱 Telegram: [t.me/meeetworld](https://t.me/meeetworld)
 - 💰 Token: `AK8sRpnMBKvBoFg8czJNnDfgtR9ELTbFPrdGAntipump`
+
+```markdown id="proof1"
+## 🧪 System Proof
+
+This system demonstrates:
+
+✔ Multi-framework AI agent abstraction  
+✔ Unified task routing via registry  
+✔ Adapter-based execution model  
+✔ Scalable agent lifecycle management  
+
+### Execution Flow Verified:
+
+Agent → Registry → Adapter → Framework → Result → Registry
