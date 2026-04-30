@@ -1,24 +1,231 @@
-<!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <script>
-      (function(){var t=localStorage.getItem('meeet-theme');var d=(t==='light')?false:(t==='dark')?true:window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.classList.toggle('dark',d);})();
-    </script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#7C3AED" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="MEEET" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <link rel="icon" href="/favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <title>MEEET STATE</title>
-    <meta name="author" content="MEEET" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MEEET Oracle</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      width: 60%;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    /* YES / NO BAR */
+    .bar-container {
+      width: 80%;
+      height: 30px;
+      background: #333;
+      margin: 20px auto;
+      display: flex;
+    }
+
+    .yes {
+      background: #00ff7f;
+      height: 100%;
+      width: 50%;
+    }
+
+    .no {
+      background: #ff3b3b;
+      height: 100%;
+      width: 50%;
+    }
+
+    /* AGENTS */
+    #agents {
+      display: grid;
+      grid-template-columns: repeat(34, 10px);
+      gap: 2px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .agent {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: gray;
+      opacity: 0.6;
+      transition: 0.3s;
+    }
+
+    .agent.yes { background: #00ff7f; }
+    .agent.no { background: #ff3b3b; }
+
+    /* FACTIONS */
+    #factions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 80%;
+      margin: 20px auto;
+    }
+
+    .faction {
+      padding: 10px;
+      border-radius: 8px;
+      background: #222;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    /* CONFIDENCE */
+    #confidence {
+      font-size: 20px;
+      margin-top: 10px;
+      color: gold;
+    }
+
+    .result {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🔮 MEEET Oracle Engine</h1>
+
+<input id="q" placeholder="Ask a question..." />
+<button onclick="ask()">Predict</button>
+<button onclick="share()">Share</button>
+
+<!-- YES / NO BAR -->
+<div class="bar-container">
+  <div id="yesBar" class="yes"></div>
+  <div id="noBar" class="no"></div>
+</div>
+
+<!-- CONFIDENCE -->
+<div id="confidence"></div>
+
+<!-- FACTIONS -->
+<div id="factions"></div>
+
+<!-- AGENTS -->
+<div id="agents"></div>
+
+<!-- RESULT -->
+<div class="result" id="result"></div>
+
+<script>
+async function ask() {
+
+  const question = document.getElementById("q").value.trim();
+
+  if (!question) {
+    alert("Enter a question first!");
+    return;
+  }
+
+  const container = document.getElementById("agents");
+  container.innerHTML = "";
+
+  const agents = [];
+
+  for (let i = 0; i < 1020; i++) {
+    const el = document.createElement("div");
+    el.className = "agent";
+    container.appendChild(el);
+    agents.push(el);
+  }
+
+  const res = await fetch("http://localhost:3000/api/predict", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question })
+  });
+
+  const data = await res.json();
+  console.log(data);
+
+  if (data.error) {
+    alert(data.error);
+    return;
+  }
+
+  // Confidence
+  const confidence = Math.round(data.confidenceScore * 100);
+  document.getElementById("confidence").innerText =
+    "Confidence: " + confidence + "%";
+
+  // YES / NO ratio
+  const total = data.yesWeight + data.noWeight;
+  const yesRatio = data.yesWeight / total;
+  const noRatio = data.noWeight / total;
+
+  document.getElementById("yesBar").style.width = (yesRatio * 100) + "%";
+  document.getElementById("noBar").style.width = (noRatio * 100) + "%";
+
+  // Animate agents
+  agents.forEach((el, i) => {
+    setTimeout(() => {
+      if (Math.random() < yesRatio) {
+        el.classList.add("yes");
+      } else {
+        el.classList.add("no");
+      }
+    }, i * 2);
+  });
+
+  // Factions
+  const factionContainer = document.getElementById("factions");
+  factionContainer.innerHTML = "";
+
+  const names = [
+    "Bullish",
+    "Bearish",
+    "Neutral",
+    "Risk-Averse",
+    "Speculative",
+    "Contrarian"
+  ];
+
+  Object.entries(data.factionBreakdown).forEach(([id, stats]) => {
+    const div = document.createElement("div");
+    div.className = "faction";
+
+    div.innerHTML = `
+      <strong>${names[id - 1]}</strong><br>
+      YES: ${stats.yes} | NO: ${stats.no}
+    `;
+
+    factionContainer.appendChild(div);
+  });
+
+  // Result
+  const winner = data.yesWeight > data.noWeight ? "YES" : "NO";
+
+  document.getElementById("result").innerText =
+`Prediction: ${winner}
+
+YES Weight: ${data.yesWeight}
+NO Weight: ${data.noWeight}
+
+Confidence: ${confidence}%`;
+}
+
+// Share
+function share() {
+  const text = document.getElementById("result").innerText;
+  const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
 </html>

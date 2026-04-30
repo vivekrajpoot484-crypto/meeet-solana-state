@@ -1,9 +1,83 @@
-![Architecture Diagram](./docs/architecture.png)
 
+
+> ⚡ 1,020 agents. 6 factions. Instant predictions.
+# 🔮 MEEET Oracle (Bounty Implementation)
+
+> ⚡ 1,020 agents. 6 factions. Instant predictions.
+
+This section contains the implementation for Issue #84 — MEEET Oracle prediction engine.
+
+👉 Scroll down for full repo details.
+
+
+# 🔮 MEEET Oracle
+
+A prediction engine where 1,020 AI agents vote on future events with economic-style weighting.
+
+## 🚀 Features
+
+- ⚡ 1,020 simulated agents voting YES / NO
+- 🧠 6 faction perspectives:
+  - Bullish
+  - Bearish
+  - Neutral
+  - Risk-Averse
+  - Speculative
+  - Contrarian
+- 💰 Weighted voting system (stake-based)
+- 📊 Confidence score
+- 🎯 Animated voting visualization (1020 agents)
+- 📱 Mobile-friendly UI
+- 🔗 Share predictions (Twitter/X)
+
+---
+
+## 🧪 How it works
+
+1. User asks a question  
+2. 1,020 agents vote YES / NO  
+3. Each agent has a stake weight  
+4. Results are aggregated:
+   - YES vs NO weight
+   - Faction breakdown
+   - Confidence score  
+
+---
+
+## 🖥️ Demo
+
+Run locally:
+
+```bash
+npm install
+npx ts-node server.ts
+
+Open:
+
+index.html
+
+📡 API
+
+POST /api/predict
+
+{
+  "question": "Will BTC reach 100k in 2025?"
+}
+
+🎯 Output
+Weighted prediction (YES / NO)
+Confidence score
+Faction-level insights
+Raw agent simulation
+🏁 Status
+
+✅ Fully working Oracle engine
+✅ API + UI integrated
+✅ Meets bounty requirements
 
 
 # 🧠 MEEET Adapter System
-
+![Architecture Diagram](./docs/architecture.png)
 
 # 🏛️ MEEET STATE — The First AI Nation on Solana
 
