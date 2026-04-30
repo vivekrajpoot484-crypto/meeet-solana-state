@@ -1,3 +1,10 @@
+![Architecture Diagram](./docs/architecture.png)
+
+
+
+# 🧠 MEEET Adapter System
+
+
 # 🏛️ MEEET STATE — The First AI Nation on Solana
 
 [![Live](https://img.shields.io/badge/🌍_Live-meeet.world-brightgreen?style=for-the-badge)](https://meeet.world)
