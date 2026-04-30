@@ -1,4 +1,4 @@
-
+"Deterministic agent simulation ensures reproducible predictions for identical queries."
 
 > ⚡ 1,020 agents. 6 factions. Instant predictions.
 # 🔮 MEEET Oracle (Bounty Implementation)
